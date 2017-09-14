@@ -1,62 +1,80 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 void iniVec(char *pal)
 {
-    i=0;
+    int i=0;
     while(i<31)
     {
         pal[i]='\0';
+        i++;
     }
-    return 0;
 }
 
-void scanner(char pal)
+void scanner(char *pal, FILE* p2)
 {
+    int f=0;
+
     if(pal[0]==':' && pal[1]=='=' && pal[2]=='\0')
     {
-        fprintf(p2, " es el simbolo de ASIGNACION.");
+        fprintf(p2, " es el simbolo de ASIGNACION.\n");
+        f=1;
     }
     if(pal[0]==',' && pal[1]=='\0')
     {
-        fprintf(p2, " es un caracter de puntuación.");
+        fprintf(p2, " es un caracter de puntuación.\n");
+        f=1;
     }
     if(pal[0]==';' && pal[1]=='\0')
     {
-        fprintf(p2, " es un caracter de puntuación.");
+        fprintf(p2, " es un caracter de puntuación.\n");
+        f=1;
     }
     if(pal[0]=='+' && pal[1]=='\0')
     {
-        fprintf(p2, " es el operador de SUMA.");
+        fprintf(p2, " es el operador de SUMA.\n");
+        f=1;
     }
     if(pal[0]=='-' && pal[1]=='\0')
     {
-        fprintf(p2, " es el operador de RESTA.");
+        fprintf(p2, " es el operador de RESTA.\n");
+        f=1;
     }
     if(pal[0]==')' && pal[1]=='\0')
     {
-        fprintf(p2, " es el caracter: PARENDERECHO.")
+        fprintf(p2, " es el caracter: PARENDERECHO.\n");
+        f=1;
     }
     if(pal[0]=='(' && pal[1]=='\0')
     {
-        fprintf(p2, " es el caracter: PARENIZQUIERDO.")
+        fprintf(p2, " es el caracter: PARENIZQUIERDO.\n");
+        f=1;
     }
     if(pal[0]=='i' && pal[1]=='n' && pal[2]=='i' && pal[3]=='c' && pal[4]=='i' && pal[5]=='o' && pal[6]=='\0')
     {
-        fprintf(p2, " es la palabra reservada INICIO.")
+        fprintf(p2, " es la palabra reservada INICIO.\n");
+        f=1;
     }
     if(pal[0]=='l' && pal[1]=='e' && pal[2]=='e' && pal[3]=='r' && pal[4]=='\0')
     {
-        fprintf(p2, " es la palabra reservada LEER.")
+        fprintf(p2, " es la palabra reservada LEER.\n");
+        f=1;
     }
     if(pal[0]=='e' && pal[1]=='s' && pal[2]=='c' && pal[3]=='r' && pal[4]=='i' && pal[5]=='b' && pal[6]=='i' && pal[7]=='r' && pal[8]=='\0')
     {
-        fprintf(p2, " es la palabra reservada ESCRIBIR.")
+        fprintf(p2, " es la palabra reservada ESCRIBIR.\n");
+        f=1;
     }
     if(pal[0]=='f' && pal[1]=='o' && pal[2]=='n' && pal[3]=='\0')
     {
-        fprintf(p2, " es la palabra reservada FIN.")
+        fprintf(p2, " es la palabra reservada FIN.\n");
+        f=1;
+    }
+    if(f=0)
+    {
+        fprintf(p2, " es un IDENTIFICADOR.\n");
     }
 
 
@@ -65,54 +83,59 @@ void scanner(char pal)
 
 int columna(char c)
 {
-    switch(c)
-    {
-    case isalpha:
-        return 1;
-        break;
-    case isdigit:
-        return 2;
-        break;
-    case '+':
-        return 3;
-        break;
-    case '-':
-        return 4;
-        break;
-    case '(':
-        return 5;
-        break;
-    case ')':
-        return 6;
-        break;
-    case ',':
-        return 7;
-        break;
-    case ';':
-        return 8;
-        break;
-    case ':':
-        return 9;
-        break;
-    case '=':
-        return 10;
-        break;
-    case '\0':
-        return 11;
-        break;
-    case isspace:
-        return 12;
-        break;
-    default:
-        return 13;
-    }
-
-
+        if(isalpha(c))
+        {
+            return 1;
+        }
+        if(isdigit(c))
+        {
+            return 2;
+        }
+        if(c=='+')
+        {
+            return 3;
+        }
+        if(c=='-')
+        {
+            return 4;
+        }
+        if(c=='(')
+        {
+            return 5;
+        }
+        if(c==')')
+        {
+            return 6;
+        }
+        if(c==',')
+        {
+            return 7;
+        }
+        if(c==';')
+        {
+            return 8;
+        }
+        if(c==':')
+        {
+            return 9;
+        }
+        if(c=='=')
+        {
+            return 10;
+        }
+        if(c=='\0')
+        {
+            return 11;
+        }
+        if(isspace(c))
+        {
+            return 12;
+        }
 }
 
 int main()
 {
-    int mTT[13][15] = {{1, 3, 5, 6, 7, 8, 9, 10, 11, 14, 13, 0,14},
+    int mTT[15][13] = {{1, 3, 5, 6, 7, 8, 9, 10, 11, 14, 13, 0,14},
                        {1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
                        {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99},
                        {4, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
@@ -126,7 +149,7 @@ int main()
                        {14, 14, 14, 14, 14, 14, 14, 14, 14, 12, 14, 14, 14},
                        {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99},
                        {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99},
-                       {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}}
+                       {99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99}};
 
     FILE* p1;
     FILE* p2;
@@ -136,37 +159,28 @@ int main()
     char pal[32];
     iniVec(pal);
     char c;
-    c=fgetc(p1);
+    c = fgetc(p1);
 
-    while(!feof(p1))
+    while(!feof)
     {
-        while(estado!=14 && estado!=99)
-        {
-
         pal[i]=c;
-
-        fputc(pal[i], p2);;
-
-
-        c=fgetc(p1);
-
-        j = columna(pal[i]);
-
-        estado = mTT[estado][j];
-
-        i++;
-        }
-
-        i=0;
-
-        if(estado=99)
+        j=columna(c);
+        estado=mTT[estado][j];
+        if(estado!=14 && estado!=99)
         {
-            fprintf("Se detecto un error sintactico en esta palabra.\n", p2);
+            if(estado=14)
+            {
+                scanner(pal, p2);
+            }
+            else
+            {
+                fprintf(p2, "Error sintactico.\n");
+            }
+
         }
-        if(estado=14)
-        {
-            scanner(pal,);
-        }
+
+
+
 
     }
 
