@@ -136,9 +136,10 @@ void scanner(FILE* p1, FILE* p2)
     c = fgetc(p1);
     limpiarBuffer();
 
-    while(!feof(p1) && f!=2)
+    while(!feof(p1) || f == 0)
     {
-        if(f == 1) f = 2;
+        if(feof(p1)) f = 1;
+
         j = columna(c);
         estado = mTT[estado][j];
 
@@ -162,7 +163,7 @@ void scanner(FILE* p1, FILE* p2)
             }
             else
             {
-                if(idCorrecto)
+                if(idCorrecto())
                 {
                     mostrarBuffer(p2);
                     fprintf(p2, "  |    IDENTIFICADOR.\n");
@@ -255,11 +256,6 @@ void scanner(FILE* p1, FILE* p2)
             estado = 0;
             limpiarBuffer();
             break;
-        }
-        if(feof(p1))
-        {
-          f = 1;
-          c = fgetc(p1);
         }
     }
 }
