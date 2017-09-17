@@ -213,8 +213,6 @@ void scanner(FILE* p1, FILE* p2)
             fprintf(p2, "  |    PUNTOYCOMA.\n");
             estado = 0;
             break;
-            mostrarBuffer(p2);
-            c = fgetc(p1);
         case 11:
             mostrarBuffer(p2);
             c = fgetc(p1);
