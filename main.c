@@ -117,22 +117,35 @@ void mostrarBuffer(FILE *p2)
 
 }
 
+bool esAsignacion()
+{
+    if(buffer[0] == ':' && buffer[1] == '=' && buffer['\0'])
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void scanner(FILE* p1, FILE* p2)
 {
-    int estado = 0, j;
+    int estado = 0, f = 0, j;
     char c;
     c = fgetc(p1);
-    limpiarBuffer;
+    limpiarBuffer();
 
-    while(!feof(p1))
+    while(!feof(p1) && f!=2)
     {
+        if(f == 1) f = 2;
         j = columna(c);
         estado = mTT[estado][j];
 
         switch(estado)
         {
         case 0:
-            limpiarBuffer;
+            limpiarBuffer();
             c = fgetc(p1);
             break;
         case 1:
@@ -159,12 +172,12 @@ void scanner(FILE* p1, FILE* p2)
                 {
                     fprintf(p2, "  |    Se detecto un error lexico, los identificadores deben tener un maximo de 32 caracteres.\n");
                     estado = 0;
+
                 }
             }
-            limpiarBuffer(p2);
+            limpiarBuffer();
             c = fgetc(p1);
             break;
-
         case 3:
             agregarCaracter(c);
             c = fgetc(p1);
@@ -175,68 +188,81 @@ void scanner(FILE* p1, FILE* p2)
             c = fgetc(p1);
             fprintf(p2, "  |    DIGITO.\n");
             estado = 0;
-            limpiarBuffer;
+            limpiarBuffer();
             break;
         case 5:
-            mostrarBuffer(p2);
+
             c = fgetc(p1);
-            fprintf(p2, "  |    SUMA.\n");
+            fprintf(p2, "+  |    SUMA.\n");
             estado = 0;
             break;
         case 6:
-            mostrarBuffer(p2);
+
             c = fgetc(p1);
-            fprintf(p2, "  |    RESTA.\n");
+            fprintf(p2, "-  |    RESTA.\n");
             estado = 0;
             break;
         case 7:
-            mostrarBuffer(p2);
+
             c = fgetc(p1);
-            fprintf(p2, "  |    PARENIZQUIERDO.\n");
+            fprintf(p2, "(  |    PARENIZQUIERDO.\n");
             estado = 0;
             break;
         case 8:
-            mostrarBuffer(p2);
+
             c = fgetc(p1);
-            fprintf(p2, "  |    PARENDERECHO.\n");
+            fprintf(p2, ")  |    PARENDERECHO.\n");
             estado = 0;
             break;
         case 9:
-            mostrarBuffer(p2);
             c = fgetc(p1);
-            fprintf(p2, "  |    COMA.\n");
+            fprintf(p2, ",  |    COMA.\n");
             estado = 0;
             break;
         case 10:
-            mostrarBuffer(p2);
             c = fgetc(p1);
-            fprintf(p2, "  |    PUNTOYCOMA.\n");
+            fprintf(p2, ";  |    PUNTOYCOMA.\n");
             estado = 0;
             break;
         case 11:
+            agregarCaracter(c);
             mostrarBuffer(p2);
             c = fgetc(p1);
             fprintf(p2, "  |    Signo de puntuación.\n");
             estado = 0;
             break;
         case 12:
+            agregarCaracter(c);
             mostrarBuffer(p2);
             c = fgetc(p1);
             fprintf(p2, "  |    Signo de puntuación.\n");
             estado = 0;
             break;
+        case 13:
+            break;
         case 14:
+            agregarCaracter(c);
             mostrarBuffer(p2);
             c = fgetc(p1);
-            fprintf(p2, "  |    Se encontro un error léxico.\n");
+            if(esAsignacion())
+                {
+                    fprintf(p2, "  |    ASIGNACION.\n");
+                }
+            else
+                {
+                fprintf(p2, "  |    Se encontro un error léxico.\n");
+                }
             estado = 0;
+            limpiarBuffer();
             break;
         }
+        if(feof(p1))
+        {
+          f = 1;
+          c = fgetc(p1);
         }
-
-
-
     }
+}
 
 int main()
 {
