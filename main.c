@@ -155,9 +155,10 @@ void scanner(FILE* p1, FILE* p2)
             break;
         case 2:
             ungetc(c, p1);
+            mostrarBuffer(p2);
             if(esReservada()!=ID)
             {
-                mostrarBuffer(p2);
+
                 fprintf(p2, "  |    Palabra Reservada.\n");
                 estado = 0;
             }
@@ -165,7 +166,7 @@ void scanner(FILE* p1, FILE* p2)
             {
                 if(idCorrecto())
                 {
-                    mostrarBuffer(p2);
+
                     fprintf(p2, "  |    IDENTIFICADOR.\n");
                     estado = 0;
                 }
